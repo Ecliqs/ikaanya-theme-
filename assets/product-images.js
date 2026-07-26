@@ -48,6 +48,18 @@ class ProductImages extends HTMLElement {
 
     this.cacheElements()
 
+    // Diagnostic logs to help debug missing main image on desktop
+    try {
+      const slides = this.cache.mainSlider ? this.cache.mainSlider.querySelectorAll(this.selectors.slide) : []
+      console.info('[product-images] slides found:', slides.length)
+      if (slides.length) {
+        const firstImg = slides[0].querySelector('img')
+        console.info('[product-images] first slide img present:', Boolean(firstImg), firstImg ? { src: firstImg.getAttribute('src') || firstImg.getAttribute('data-photoswipe-src') } : null)
+      }
+    } catch (e) {
+      console.warn('[product-images] diagnostics failed', e)
+    }
+
     const dataSetEl = this.cache.mainSlider.querySelector('[data-set-name]')
     if (dataSetEl) {
       this.settings.imageSetName = dataSetEl.dataset.setName
