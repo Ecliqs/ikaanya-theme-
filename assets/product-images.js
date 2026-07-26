@@ -68,7 +68,13 @@ class ProductImages extends HTMLElement {
     }
 
     this.initVariants()
-    this.initImageZoom()
+    // Initialize image zoom only on mobile devices — desktop will not have the zoom option
+    if (matchMedia('(max-width: 768px)').matches) {
+      this.initImageZoom()
+    } else {
+      console.info('[product-images] initImageZoom skipped on desktop for section', this.sectionId)
+    }
+
     this.initProductSlider(this.currentVariant)
 
     // Force hydrate is-land elements inside the main slider for desktop so images render immediately
