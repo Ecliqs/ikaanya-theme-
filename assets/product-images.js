@@ -70,6 +70,25 @@ class ProductImages extends HTMLElement {
     this.initVariants()
     this.initImageZoom()
     this.initProductSlider(this.currentVariant)
+
+    // Force hydrate is-land elements inside the main slider for desktop so images render immediately
+    try {
+      // wait briefly to ensure is-land is defined and DOM structure is ready
+      setTimeout(() => {
+        const isLandEls = this.cache.mainSlider ? this.cache.mainSlider.querySelectorAll('is-land[on\\:visible], is-land[on:visible]') : []
+        isLandEls.forEach((el) => {
+          try {
+            // dispatch the 'visible' event that is-land listens for when on:visible is used
+            el.dispatchEvent(new Event('visible'))
+          } catch (e) {
+            console.warn('[product-images] is-land visible dispatch failed', e)
+          }
+        })
+      }, 50)
+    } catch (e) {
+      console.warn('[product-images] hydrate is-land error', e)
+    }
+
     this.customMediaListeners()
   }
 
