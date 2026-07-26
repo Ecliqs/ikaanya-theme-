@@ -37,7 +37,6 @@ class ProductImages extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!this.dataset.modal) return
 
     this.abortController = new AbortController()
     this.videoObjects = {}
