@@ -1,0 +1,216 @@
+{%- if section.settings.divider -%}<div class="section--divider">{%- endif -%}
+
+<div class="page-width">
+  <div class="logo-bar-bg" style="background:{{section.settings.bg}};">
+    <div class="logo-bar-bg-inner" >
+      
+       <div class="logo-bar-bg-inner-flex flex flex-flow" >
+         <div class="logo-bar-bg-inner-flex-left" >
+  {%- if section.settings.title != blank -%}
+    <div class="section-header-samll">
+      <h2 class="section-header__title">{{ section.settings.title | escape }}</h2>
+    {%- if section.settings.subtitle != blank -%}   <span>{{section.settings.subtitle}}</span> {%- endif -%}
+    </div>
+  {%- endif -%}
+
+    <div class="logo-description">
+      <ul>
+      {% if section.settings.line1 != blank %}  <li><a href="{{section.settings.link1}}">{{section.settings.line1}}</a></li> {% endif %}
+        {% if section.settings.line2 != blank %}  <li><a href="{{section.settings.link2}}">{{section.settings.line2}}</a></li> {% endif %}
+        {% if section.settings.line3 != blank %}  <li><a href="{{section.settings.link3}}">{{section.settings.line3}}</a></li> {% endif %}
+      </ul>
+      
+      {% if section.settings.btn != blank %}
+      <a class="btn learn-more" href="{{section.settings.btn-link}}">{{section.settings.btn}}</a>
+      {% endif %}
+    </div>
+         </div>
+      
+      {% if section.settings.image != blank %}
+           <div class="logo-bar-bg-inner-flex-right" >
+      <img src="{{section.settings.image | img_url:'master'}}">  
+         </div>
+      {% endif %}
+      
+         
+      </div> 
+         
+      
+  {%- if section.blocks.size > 0 -%}
+    <div class="logo-bar logo-bar--{{ section.id }}">
+      <div class="new-grid logo-bar-new-grid product-grid" data-view="6-2" data-flickity='{ "cellAlign": "left", "contain": true, "wrapAround": true, "freeScroll": true, "pageDots": false }'>
+        {%- for block in section.blocks -%}
+          <div class="logo-bar-grid" {{ block.shopify_attributes }}>
+            <div class="logo-bar__item1{% if block.settings.image == blank %} logo-bar__item-svg{% endif %}">
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}" class="logo-bar__link" aria-label="{{ block.settings.image.alt }}">
+              {%- endif -%}
+              {%- if block.settings.image != blank -%}
+                {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+               <img src="{{block.settings.image | img_url:'master'}}">
+              {%- else -%}
+                {{ 'logo' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--no-padding' }}
+              {%- endif -%}
+              {%- if block.settings.link != blank -%}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+      
+      {% if section.settings.titlebottom != blank %}
+    <div class="heading-background-logo" style="background:{{section.settings.bg}}; color:{{section.settings.color-text}};">   
+      {{section.settings.titlebottom}}
+     
+      </div>  
+      {% endif %}
+      
+</div>
+    
+</div>
+</div>
+
+{%- if section.settings.divider -%}</div>{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Logo list",
+    "class": "index-section",
+    "max_blocks": 16,
+    "settings": [
+      {
+       "type": "color",
+       "id": "bg",
+       "label": "Background",
+       "default": "#38a4b0"
+      }, 
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Our brands"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Sub Heading",
+        "default": "KNOW MORE ABOUT OUR EXCLUSIVE STUDIO-ONLY OFFERS:"
+      }, 
+      {
+        "type": "checkbox",
+        "id": "divider",
+        "label": "Show section divider",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "line1",
+        "label": "Line 1",
+        "default": "BULK ORDER DISCOUNTS"
+      },
+      {
+        "type": "url",
+        "id": "link1",
+        "label": "link 1"
+      },
+      {
+        "type": "text",
+        "id": "line2",
+        "label": "Line 2",
+        "default": "EXCLUSIVE DESIGNS JUST FOR YOU"
+      },
+      {
+        "type": "url",
+        "id": "link2",
+        "label": "link 2"
+      },
+      {
+        "type": "text",
+        "id": "line3",
+        "label": "Line 3",
+        "default": "YOUR BRANDING"
+      },
+      {
+        "type": "url",
+        "id": "link3",
+        "label": "link 3"
+      },
+      {
+        "type": "text",
+        "id": "btn",
+        "label": "Button",
+        "default": "Learn More"
+      },
+      {
+        "type": "url",
+        "id": "btn-link",
+        "label": "Button Link"
+      },
+      {
+       "type": "image_picker",
+       "id": "image",
+       "label": "Image"
+     },
+     {
+        "type": "text",
+        "id": "titlebottom",
+        "label": "Bottom Heading",
+        "default": "Our brands"
+      },
+      {
+       "type": "color",
+       "id": "color-text",
+       "label": "Text Color",
+       "default": "#fff"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_image",
+        "name": "Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Add alt text for better SEO with 'Edit' button above"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link",
+            "info": "Optional"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Logo list custom",
+        "blocks": [
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

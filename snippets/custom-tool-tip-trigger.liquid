@@ -1,0 +1,8 @@
+<tool-tip-trigger class="tool-tip-trigger" data-tool-tip-trigger="" data-tool-tip="{{ context }}">
+  <div class="tool-tip-trigger__title">{{ title }}</div>
+  <span class="tool-tip-trigger__content" data-tool-tip-content="">
+    {% if product.metafields.product.size_guid_image != blank %}
+     <img src="{{ product.metafields.product.size_guid_image | img_url: '1024x' }}">
+    {% endif %}
+  </span>
+</tool-tip-trigger>

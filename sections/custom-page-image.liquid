@@ -1,0 +1,40 @@
+<div class="custom-page-image">
+  <div class="wrapper-image">
+    {% if section.settings.image != blank %}
+      <img src="{{ section.settings.image | image_url }}" alt="" height="" width="" />
+    {% endif %}
+    <div class="content text-center index-section">
+      <h2>{{ section.settings.title }}</h2>
+      <p>{{ section.settings.content }}</p>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Custom Page Image",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "textarea",
+        "id": "content",
+        "label": "Content"
+      }
+    ],
+     "presets": [
+        {
+          "name": "Custom Page Image",
+        }
+     ]
+  }
+{% endschema %}

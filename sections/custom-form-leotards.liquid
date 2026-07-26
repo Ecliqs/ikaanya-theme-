@@ -1,0 +1,370 @@
+<div id="form" class="custom-form-leotard newsletter-{{ section.id }} color-scheme-{{ section.settings.color_scheme }}" >
+  {%- if section.settings.color_scheme != 'none' -%}
+    {%- render 'color-scheme-texture', color_scheme: section.settings.color_scheme -%}
+  {%- endif -%}
+  <div class="page-width{% if section.settings.narrow_column %} page-width--narrow{% endif %}">
+    
+        {%- if section.settings.title != blank or section.settings.text != blank -%}
+      <div class="section-header custom-header text-left">
+        {%- if section.settings.title != blank -%}
+         <h2 class="section-header__title section-header__title-custom">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%} 
+      <div class="rte section-header__rte">{{ section.settings.text }}</div>
+      </div>
+           
+    {% endif %}
+    
+    <div class="contact-cover-div flex flex-flow">
+      <div class="contact-leftbar">
+
+  {% if section.settings.title3 != blank %} <h4 class="line-title"><span> {{section.settings.title3}} </span></h4> {% endif %}
+      
+    <div class="form-vertical">
+      {%- assign form_id = 'contact-' | append: section.id -%}
+      {%- form 'contact', id: form_id -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="note note--success">
+            {{ 'contact.form.post_success' | t }}
+          </p>
+        {%- endif -%}
+
+        {{ form.errors | default_errors }}
+
+        <div class="grid grid--small"> 
+          <div class="grid__item">
+              <!-- <label for="ContactFormEmail-{{ section.id }}">{{ 'contact.form.email' | t }}</label> -->
+              <input type="email" id="ContactFormEmail-{{ section.id }}" class="input-full" name="contact[email]" autocorrect="off" placeholder="{{ 'contact.form.email' | t }}" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+          </div>
+        </div>
+        
+        <div class="grid grid--small"> 
+           <div class="grid__item">
+         {%- if section.settings.show_phone -%}
+          <!-- <label for="ContactFormPhone-{{ section.id }}">{{ 'contact.form.phone' | t }}</label> -->
+          <input type="tel" id="ContactFormPhone-{{ section.id }}" class="input-full" name="contact[phone]" pattern="[0-9\-]*" placeholder="{{ 'contact.form.phone' | t }}" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+        {%- endif -%}
+           </div>
+        </div>
+        
+        <div class="grid grid--small">
+          <div class="grid__item">
+            <!-- <label for="ContactFormName-{{ section.id }}">First Name</label> -->
+            <input type="text" id="ContactFormName-{{ section.id }}" class="input-full" name="contact[name]" placeholder="First Name" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+        </div>
+
+        <div class="grid grid--small">
+          <div class="grid__item">
+            <!-- <label for="ContactFormLast-{{ section.id }}">Last Name</label> -->
+            <input type="text" id="ContactFormLast{{ section.id }}" class="input-full" name="contact[last]" autocapitalize="words" placeholder="Last Name" value="{% if form.last %}{{ form.last }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+        </div>
+        
+        <div class="grid grid--small">
+           <div class="grid__item">
+          <!-- <label for="ContactFormMessage-{{ section.id }}">{{ 'contact.form.message' | t }}</label> -->
+          <textarea rows="3" id="ContactFormMessage-{{ section.id }}" placeholder="{{ 'contact.form.message' | t }}" class="input-full" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+        </div>
+        </div>
+       
+
+        <div class="con-note">
+          <p>Please choose one or more custom products that you are intrested in:</p>
+          <div class="check-box">
+            <div class="con-check">
+              <input type="checkbox" id="ContactFormTraining-{{ section.id }}" name="contact[training]" value="{% if form.training %}{{ form.training }}{% endif %}">
+              <label for="ContactFormTraining-{{ section.id }}"> Gymnastics Training Leotards</label>
+            </div>
+            <div class="con-check">
+              <input type="checkbox" id="ContactFormCompetition-{{ section.id }}" name="contact[competition]" value="{% if form.competition %}{{ form.competition }}{% endif %}">
+              <label for="ContactFormCompetition-{{ section.id }}"> Gymnastics Competition Leotards</label>
+            </div>
+          </div>
+          
+            
+          <p>By submitting this form, you agree Ikaanya may use your information to provide products/ services of interest and for commercial contact. You may receive updates on offerings.</p>
+        </div>
+        
+     {% comment %} <div class="section-header ">
+        {%- if section.settings.title1 != blank -%}
+          <h2 class="section-header__title">
+            {{ section.settings.title1 }}
+          </h2>
+        {%- endif -%}
+      </div> 
+      
+        <div class="grid grid--small">
+          <div class="grid__item medium-up--one-half">
+            <label for="ContactFormNamee-{{ section.id }}">{{ 'contact.form.name' | t }}</label>
+            <input type="text" id="ContactFormNamee-{{ section.id }}" class="input-full" name="contact[name]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+
+          <div class="grid__item medium-up--one-half">
+          <label for="ContactFormemail-{{ section.id }}">{{ 'contact.form.email' | t }}</label>
+            <input type="text" id="ContactFormemail-{{ section.id }}" class="input-full" name="contact[Email]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+        </div>
+      
+            <label for="ContactFormName-Address">Address</label>
+            <input type="text" id="ContactFormName-Address" class="input-full" name="contact[Address]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+      
+         <label for="ContactFormName-Address">Number of Students</label>
+         <input type="text" id="ContactFormName-Address" class="input-full" name="contact[students]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+          <label for="ContactFormName-Address">Website</label>
+          <input type="text" id="ContactFormName-Address" class="input-full" name="contact[Website]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+      
+      
+      
+      
+
+       <input id="form-data" type="hidden"  class="input-full" name="contact[Form Teacher Registration page]" />
+    
+       <input id="form-data" type="hidden"  class="input-full" name="contact[Form Teacher Registration page]" value="{{ shop.url }}/pages/{{page.handle}}" />
+      
+       {% endcomment %}
+        <button type="submit" class="btn">
+          {{ 'contact.form.send' | t }}
+        </button>
+
+        {% comment %}
+          Remove the following three lines of code to remove the note
+          about being protected by Google's reCAPTCHA service.
+          By removing it, the small reCAPTCHA widget will appear in the
+          bottom right corner of the page.
+        {% endcomment %}
+
+       
+       {% comment %}  {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }} {% endcomment %}
+
+      {%- endform -%}
+    </div>
+  </div>
+    <div class="contact-rightbar">
+      {% if section.settings.title2 != blank %} <h4 class="line-title"><span> {{section.settings.title2}} </span></h4> {% endif %}
+         
+      
+      <ul class="contact-page-icon">
+       
+        <li>
+          <div class="list">
+           <img src="//cdn.shopify.com/s/files/1/0629/2956/7962/files/phone.svg?v=1650366474">
+           <span>Phone Number</span>
+          </div>
+          <a href="tel:919353193574" target="_blank">+91 9353193574</a>
+        </li>
+        
+        <li>
+          <div class="list">
+            <img src="//cdn.shopify.com/s/files/1/0629/2956/7962/files/email.svg?v=1650366474">
+            <span>E-mail</span>
+          </div>
+          <a href="mailto:support@ikaanya.com" target="_blank">support@ikaanya.com</a>
+        </li>
+        
+        <li>
+          <div class="list">
+            <img src="//cdn.shopify.com/s/files/1/0629/2956/7962/files/home.svg?v=1650366474">
+            <span>Social</span>
+          </div>
+          <a href="https://www.instagram.com/ikaanyaapparel/" target="_blank">@ikaanyaapparel</a>
+        </li>
+        
+      </ul>
+      
+    </div>
+    
+    
+    
+    </div>
+    
+    </div>
+</div>
+
+
+{% comment %}
+<div class="index-section newsletter-{{ section.id }} color-scheme-{{ section.settings.color_scheme }}">
+  {%- if section.settings.color_scheme != 'none' -%}
+    {%- render 'color-scheme-texture', color_scheme: section.settings.color_scheme -%}
+  {%- endif -%}
+  <div class="program-form  page-width{% if section.settings.narrow_column %} page-width--narrow{% endif %}">
+    {%- if section.settings.title != blank or section.settings.text != blank -%}
+      <div class="section-header ">
+        {%- if section.settings.title != blank -%}
+          <h2 class="section-header__title">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="rte section-header__rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {% endif %}
+
+    <div class="form-vertical">
+      {%- assign form_id = 'contact-' | append: section.id -%}
+      {%- form 'contact', id: form_id -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="note note--success">
+            {{ 'contact.form.post_success' | t }}
+          </p>
+        {%- endif -%}
+
+        {{ form.errors | default_errors }}
+
+        <div class="grid grid--small">
+          <div class="grid__item medium-up--one-half">
+            <label for="ContactFormName-{{ section.id }}">{{ 'contact.form.name' | t }}</label>
+            <input type="text" id="ContactFormName-{{ section.id }}" class="input-full" name="contact[name]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+
+          <div class="grid__item medium-up--one-half">
+            <label for="ContactFormEmail-{{ section.id }}">{{ 'contact.form.email' | t }}</label>
+            <input type="email" id="ContactFormEmail-{{ section.id }}" class="input-full" name="contact[email]" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+          </div>
+        </div>
+
+        {%- if section.settings.show_phone -%}
+          <label for="ContactFormPhone-{{ section.id }}">{{ 'contact.form.phone' | t }}</label>
+          <input type="tel" id="ContactFormPhone-{{ section.id }}" class="input-full" name="contact[phone]" pattern="[0-9\-]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+        {%- endif -%}
+
+      <div class="section-header ">
+        {%- if section.settings.title1 != blank -%}
+          <h2 class="section-header__title">
+            {{ section.settings.title1 }}
+          </h2>
+        {%- endif -%}
+      </div>
+      
+        <div class="grid grid--small">
+          <div class="grid__item medium-up--one-half">
+            <label for="ContactFormNamee-{{ section.id }}">{{ 'contact.form.name' | t }}</label>
+            <input type="text" id="ContactFormNamee-{{ section.id }}" class="input-full" name="contact[name]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+
+          <div class="grid__item medium-up--one-half">
+          <label for="ContactFormemail-{{ section.id }}">{{ 'contact.form.email' | t }}</label>
+            <input type="text" id="ContactFormemail-{{ section.id }}" class="input-full" name="contact[Email]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>
+        </div>
+      
+            <label for="ContactFormName-Address">Address</label>
+            <input type="text" id="ContactFormName-Address" class="input-full" name="contact[Address]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+      
+       <label for="ContactFormName-Address">Approximately how many students are in the school?</label>
+       <input type="text" id="ContactFormName-Address" class="input-full" name="contact[students]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+          <label for="ContactFormName-Address">Website</label>
+          <input type="text" id="ContactFormName-Address" class="input-full" name="contact[Website]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+      
+      
+      
+        <label for="ContactFormMessage-{{ section.id }}">{{ 'contact.form.message' | t }}</label>
+        <textarea rows="5" id="ContactFormMessage-{{ section.id }}" class="input-full" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+        <button type="submit" class="btn">
+          {{ 'contact.form.send' | t }}
+        </button>
+
+        {% comment %}
+          Remove the following three lines of code to remove the note
+          about being protected by Google's reCAPTCHA service.
+          By removing it, the small reCAPTCHA widget will appear in the
+          bottom right corner of the page.
+        {% endcomment %}
+        {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+{% endcomment %}
+
+{% schema %}
+  {
+    "name": "Custom form Leotards",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "All submissions are sent to the customer email address of your store. [Learn more](https://help.shopify.com/en/manual/using-themes/change-the-layout/add-contact-form#view-contact-form-submissions)."
+      },
+     
+     {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Contact us"
+      },
+      {
+        "type": "text",
+        "id": "title2",
+        "label": "Title",
+        "default": "INFORMATION ABOUT US"
+      },
+       {
+        "type": "text",
+        "id": "title3",
+        "label": "Title",
+        "default": "GET IN TOUCH WITH US"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text"
+      },
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Title",
+        "default": "  Your School/Studio Information"
+      },  
+      {
+        "type": "checkbox",
+        "id": "show_phone",
+        "label": "Add phone number field"
+      },
+      {
+        "type": "checkbox",
+        "id": "narrow_column",
+        "label": "Narrow column",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "label": "Color scheme",
+        "default": "1",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "Custom form Leotards"
+    }]
+  }
+{% endschema %}

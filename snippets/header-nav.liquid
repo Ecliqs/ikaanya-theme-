@@ -1,0 +1,84 @@
+{% # components v3.0.1 | Copyright © 2024 Archetype Themes Limited Partnership  | "Shopify Theme Store (https://www.shopify.com/legal/terms#9-additional-services)" License  %}
+{%- comment -%}
+  Renders the header navigation
+
+  Accepts:
+  - slot {string} - The slot content
+  - wrapper_class {string} - The header wrapper class
+  - overlay_header {boolean} - Whether the header has an overlay
+
+  Usage:
+  {% render 'header-nav', slot: slot %}
+{%- endcomment -%}
+
+{%- liquid
+  assign overlay_header = overlay_header | default: false, allow_false: true
+-%}
+
+<header-nav
+  id="HeaderWrapper"
+  class="header-wrapper{% if overlay_header and section.index == 2 %} header-wrapper--overlay is-light{% endif %}{% if wrapper_class %} {{ wrapper_class }}{%- endif %}"
+  defer-hydration
+>
+  <div data-section-id="toolbar" data-section-type="toolbar">
+  <div class="toolbar">
+    <div class="page-width">
+      <div class="toolbar__content">
+  <div class="toolbar__item toolbar__item--announcements">
+    <div class="announcement-bar">
+      <div class="slideshow-wrapper">
+        <button type="button" class="visually-hidden slideshow__pause" data-id="toolbar" aria-live="polite">
+          <span class="slideshow__pause-stop">
+            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-pause" viewBox="0 0 10 13"><g fill="#000" fill-rule="evenodd"><path d="M0 0h3v13H0zM7 0h3v13H7z"></path></g></svg>
+            <span class="icon__fallback-text">Pause slideshow</span>
+          </span>
+          <span class="slideshow__pause-play">
+            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-play" viewBox="18.24 17.35 24.52 28.3"><path fill="#323232" d="M22.1 19.151v25.5l20.4-13.489-20.4-12.011z"></path></svg>
+            <span class="icon__fallback-text">Play slideshow</span>
+          </span>
+        </button>
+
+        <div id="AnnouncementSlider" class="announcement-slider flickity-enabled is-fade" data-block-count="1" tabindex="0"><div class="flickity-viewport" style="height: 21px; touch-action: pan-y;"><div class="flickity-slider" style="left: 0px; transform: translateX(0%);"><div id="AnnouncementSlide-cff431d4-9a3a-4622-a731-bd2d4c67a45c" class="slideshow__slide announcement-slider__slide is-selected" data-index="0" style="position: absolute; left: 0px; transform: translateX(0%);">
+                <div class="announcement-slider__content"><div class="medium-up--hide">
+                      <p>Get ₹500 off on ₹5,000 spend + 5% extra on prepaid!</p>
+                    </div>
+                    <div class="small--hide">
+                      <p>Get ₹500 off on ₹5,000 spend + 5% extra on prepaid!</p>
+                    </div></div>
+              </div></div></div></div>
+      </div>
+    </div>
+  </div>
+
+<div class="toolbar__item small--hide">
+ <ul class="inline-list toolbar__social cstm-social-network"><li><a href="/pages/contact">Contact Us <span class="menu-line"></span></a>  </li><li> <a href="tel:919353193574">+91 935 3193 574 </a>  </li>
+            <li class="cstm-social-network-li">
+               <a rel="noreferrer" href="https://web.whatsapp.com/send?phone=+919353193574&amp;text&amp;app_absent=0" title="Whatsapp Us On: +919353193574" target="_blank">
+                  <svg class="icon icon-whapapp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"></path></svg>
+                </a>
+              </li><li class="cstm-social-network-li">
+                  <a target="_blank" rel="noopener" href="https://www.instagram.com/ikaanyaapparel/?igshid=YmMyMTA2M2Y=" title="IKAANYA on Instagram">
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-instagram" viewBox="0 0 32 32"><path fill="#444" d="M16 3.094c4.206 0 4.7.019 6.363.094 1.538.069 2.369.325 2.925.544.738.287 1.262.625 1.813 1.175s.894 1.075 1.175 1.813c.212.556.475 1.387.544 2.925.075 1.662.094 2.156.094 6.363s-.019 4.7-.094 6.363c-.069 1.538-.325 2.369-.544 2.925-.288.738-.625 1.262-1.175 1.813s-1.075.894-1.813 1.175c-.556.212-1.387.475-2.925.544-1.663.075-2.156.094-6.363.094s-4.7-.019-6.363-.094c-1.537-.069-2.369-.325-2.925-.544-.737-.288-1.263-.625-1.813-1.175s-.894-1.075-1.175-1.813c-.212-.556-.475-1.387-.544-2.925-.075-1.663-.094-2.156-.094-6.363s.019-4.7.094-6.363c.069-1.537.325-2.369.544-2.925.287-.737.625-1.263 1.175-1.813s1.075-.894 1.813-1.175c.556-.212 1.388-.475 2.925-.544 1.662-.081 2.156-.094 6.363-.094zm0-2.838c-4.275 0-4.813.019-6.494.094-1.675.075-2.819.344-3.819.731-1.037.4-1.913.944-2.788 1.819S1.486 4.656 1.08 5.688c-.387 1-.656 2.144-.731 3.825-.075 1.675-.094 2.213-.094 6.488s.019 4.813.094 6.494c.075 1.675.344 2.819.731 3.825.4 1.038.944 1.913 1.819 2.788s1.756 1.413 2.788 1.819c1 .387 2.144.656 3.825.731s2.213.094 6.494.094 4.813-.019 6.494-.094c1.675-.075 2.819-.344 3.825-.731 1.038-.4 1.913-.944 2.788-1.819s1.413-1.756 1.819-2.788c.387-1 .656-2.144.731-3.825s.094-2.212.094-6.494-.019-4.813-.094-6.494c-.075-1.675-.344-2.819-.731-3.825-.4-1.038-.944-1.913-1.819-2.788s-1.756-1.413-2.788-1.819c-1-.387-2.144-.656-3.825-.731C20.812.275 20.275.256 16 .256z"></path><path fill="#444" d="M16 7.912a8.088 8.088 0 0 0 0 16.175c4.463 0 8.087-3.625 8.087-8.088s-3.625-8.088-8.088-8.088zm0 13.338a5.25 5.25 0 1 1 0-10.5 5.25 5.25 0 1 1 0 10.5zM26.294 7.594a1.887 1.887 0 1 1-3.774.002 1.887 1.887 0 0 1 3.774-.003z"></path></svg>
+                    <span class="icon__fallback-text">Instagram</span>
+                  </a>
+                </li><li class="cstm-social-network-li">
+                  <a target="_blank" rel="noopener" href="https://www.facebook.com/IkaanyaApparel" title="IKAANYA on Facebook">
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-facebook" viewBox="0 0 14222 14222"><path d="M14222 7112c0 3549.352-2600.418 6491.344-6000 7024.72V9168h1657l315-2056H8222V5778c0-562 275-1111 1159-1111h897V2917s-814-139-1592-139c-1624 0-2686 984-2686 2767v1567H4194v2056h1806v4968.72C2600.418 13603.344 0 10661.352 0 7112 0 3184.703 3183.703 1 7111 1s7111 3183.703 7111 7111zm-8222 7025c362 57 733 86 1111 86-377.945 0-749.003-29.485-1111-86.28zm2222 0v-.28a7107.458 7107.458 0 0 1-167.717 24.267A7407.158 7407.158 0 0 0 8222 14137zm-167.717 23.987C7745.664 14201.89 7430.797 14223 7111 14223c319.843 0 634.675-21.479 943.283-62.013z"></path></svg>
+                    <span class="icon__fallback-text">Facebook</span>
+                  </a>
+                </li><li class="cstm-social-network-li">
+                  <a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UCvIlSdn6JC_CYjV4PJXCkcg" title="IKAANYA on YouTube">
+                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-youtube" viewBox="0 0 21 20"><path fill="#444" d="M-.196 15.803q0 1.23.812 2.092t1.977.861h14.946q1.165 0 1.977-.861t.812-2.092V3.909q0-1.23-.82-2.116T17.539.907H2.593q-1.148 0-1.969.886t-.82 2.116v11.894zm7.465-2.149V6.058q0-.115.066-.18.049-.016.082-.016l.082.016 7.153 3.806q.066.066.066.164 0 .066-.066.131l-7.153 3.806q-.033.033-.066.033-.066 0-.098-.033-.066-.066-.066-.131z"></path></svg>
+                    <span class="icon__fallback-text">YouTube</span>
+                  </a>
+                </li></ul>
+          </div></div>
+
+    </div>
+  </div>
+</div>
+  {{- slot -}}
+</header-nav>
+<script type="module">
+  import 'components/header-nav'
+</script>

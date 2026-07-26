@@ -1,0 +1,21 @@
+{%- liquid
+  assign context = collection
+  if request.page_type == 'search'
+    assign context = search
+  endif
+-%}
+
+<div class="collection-sidebar small--hide" id="CollectionSidebarFilterWrap">
+  <div class="filter-wrapper" id="custom-filter-menu">
+    <button
+          type="button"
+          class="collection-filter__btn text-link small--hide" id="custom-filter-menu-button"
+        >Apply</button>
+    <div class="collection-filter__item collection-filter__item--drawer">
+      </div>
+    {%- render 'item-grid-filters', context: context -%}
+  </div>
+  
+</div>
+
+

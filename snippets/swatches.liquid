@@ -1,0 +1,215 @@
+{% # components v3.0.1 | Copyright © 2024 Archetype Themes Limited Partnership  | "Shopify Theme Store (https://www.shopify.com/legal/terms#9-additional-services)" License  %}
+{%- comment -%}
+  Renders a product's color swatches.
+
+  Accepts:
+  - product {product} - The product object
+
+  Usage:
+  {% render 'swatches', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  capture swatch_trigger
+    assign trigger_color_swatch = 'trigger.color_swatch' | t | downcase
+    render 't_with_fallback', t: trigger_color_swatch, fallback: 'color'
+  endcapture
+
+  assign swatch_file_extension = 'png'
+  assign color_count = 0
+  assign max_colors_show = 4
+  assign more_than_max = false
+  assign hydration = hydration | default: 'on:idle'
+  assign use_gradient_swatch = false
+  assign product_gradient = ''
+  assign product_colors = product.metafields.custom.product_colors.value
+  assign linked_products = product.metafields.custom.separate_product_link.value
+  assign has_color_option = false
+
+  if product_colors != blank
+    assign use_gradient_swatch = true
+    assign gradient_color_count = product_colors.size
+    for color in product_colors
+      assign percent = 100 | divided_by: gradient_color_count
+      assign stop_start = percent | times: forloop.index0
+      assign stop_end = percent | times: forloop.index
+      capture gradient_part
+        echo color
+        echo ' '
+        echo stop_start
+        echo '% '
+        echo stop_end
+        echo '%'
+      endcapture
+      if forloop.first
+        assign product_gradient = gradient_part
+      else
+        assign product_gradient = product_gradient | append: ', ' | append: gradient_part
+      endif
+    endfor
+  endif
+-%}
+
+{%- for option in product.options_with_values -%}
+  {%- liquid
+    assign option_name = option.name | downcase
+    assign is_color = false
+    if swatch_trigger contains option_name
+      assign is_color = true
+    elsif swatch_trigger == 'color' and option_name contains 'colour'
+      assign is_color = true
+    endif
+  -%}
+  {%- if is_color -%}
+    {%- assign has_color_option = true -%}
+    {%- assign option_index = forloop.index0 -%}
+    {%- assign values = '' -%}
+    <is-land {{ hydration }}>
+      <color-swatches class="grid-product__colors">
+        {%- for variant in product.variants -%}
+          {%- assign value = variant.options[option_index] %}
+          {%- unless values contains value -%}
+            {%- liquid
+              assign values = values | join: ',' | append: ',' | append: value | split: ','
+
+              assign color_file_name = value | handle | append: '.' | append: swatch_file_extension
+              assign color_image = color_file_name | file_img_url: '50x50' | prepend: 'https:' | split: '?' | first
+              assign color_swatch_fallback = value | split: ' ' | last | handle
+              assign color_count = color_count | plus: 1
+            -%}
+
+            {%- if color_count <= max_colors_show -%}
+              <span
+                class="color-swatch color-swatch--{{ value | handle }}{% if variant.image %} color-swatch--with-image{% endif %}"
+                data-url="{{ variant.url | within: collection }}"
+                {% if variant.image %}
+                  data-variant-id="{{ variant.id }}"
+                  data-variant-image="{{ variant.image | image_url: width: 400 }}"
+                {% endif %}
+                style="{% unless use_gradient_swatch %}background-color: {{ color_swatch_fallback }};{% if images[color_file_name] != blank %}background-image: url({{ color_image }});{% endif %}{% endunless %}"
+              >
+                {% if use_gradient_swatch %}
+                  <p style="background: linear-gradient(90deg, {{ product_gradient }}); width: 100%; height: 100%; border-radius: 50%; margin: 0;"></p>
+                {% endif %}
+                <span class="visually-hidden">{{ value }}</span>
+              </span>
+            {%- else -%}
+              {%- assign more_than_max = true -%}
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+
+        {%- if more_than_max -%}
+          {%- assign more_colors = color_count | minus: max_colors_show -%}
+          <small class="color-swatch__more">+{{ more_colors }}</small>
+        {%- endif -%}
+
+        {%- if linked_products != blank -%}
+          {%- for linked_product in linked_products -%}
+            {%- if linked_product.id != product.id -%}
+              {%- assign linked_colors = linked_product.metafields.custom.product_colors.value -%}
+              {%- if linked_colors != blank -%}
+                {%- assign linked_gradient = '' -%}
+                {%- assign linked_color_count = linked_colors.size -%}
+                {%- for linked_color in linked_colors -%}
+                  {%- assign linked_percent = 100 | divided_by: linked_color_count -%}
+                  {%- assign linked_stop_start = linked_percent | times: forloop.index0 -%}
+                  {%- assign linked_stop_end = linked_percent | times: forloop.index -%}
+                  {%- capture linked_gradient_part -%}
+                    {{ linked_color }} {{ linked_stop_start }}% {{ linked_stop_end }}%
+                  {%- endcapture -%}
+                  {%- if forloop.first -%}
+                    {%- assign linked_gradient = linked_gradient_part -%}
+                  {%- else -%}
+                    {%- assign linked_gradient = linked_gradient | append: ', ' | append: linked_gradient_part -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                <a
+                  class="color-swatch color-swatch--{{ linked_product.handle }} color-swatch--with-image"
+                  href="{{ linked_product.url }}"
+                  data-url="{{ linked_product.url }}"
+                  {% if linked_product.featured_media %}
+                    data-variant-image="{{ linked_product.featured_media | image_url: width: 400 }}"
+                  {% endif %}
+                >
+                  <p style="background: linear-gradient(90deg, {{ linked_gradient }}); width: 100%; height: 100%; border-radius: 50%; margin: 0;"></p>
+                  <span class="visually-hidden">{{ linked_product.title }}</span>
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        <template data-island>
+          <script type="module">
+            import '@archetype-themes/custom-elements/swatches'
+          </script>
+        </template>
+      </color-swatches>
+    </is-land>
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if has_color_option == false and product_colors != blank -%}
+  <is-land {{ hydration }}>
+    <color-swatches class="grid-product__colors">
+      <span
+        class="color-swatch color-swatch--metafield color-swatch--with-image"
+        data-url="{{ product.url | within: collection }}"
+        {% if product.featured_media %}
+          data-variant-image="{{ product.featured_media | image_url: width: 400 }}"
+        {% endif %}
+        style="{% unless use_gradient_swatch %}background-color: {{ product_colors | first }};{% endunless %}"
+      >
+        {% if use_gradient_swatch %}
+          <p style="background: linear-gradient(90deg, {{ product_gradient }}); width: 100%; height: 100%; border-radius: 50%; margin: 0;"></p>
+        {% endif %}
+        <span class="visually-hidden">{{ product.title }}</span>
+      </span>
+
+      {%- if linked_products != blank -%}
+        {%- for linked_product in linked_products -%}
+          {%- if linked_product.id != product.id -%}
+            {%- assign linked_colors = linked_product.metafields.custom.product_colors.value -%}
+            {%- if linked_colors != blank -%}
+              {%- assign linked_gradient = '' -%}
+              {%- assign linked_color_count = linked_colors.size -%}
+              {%- for linked_color in linked_colors -%}
+                {%- assign linked_percent = 100 | divided_by: linked_color_count -%}
+                {%- assign linked_stop_start = linked_percent | times: forloop.index0 -%}
+                {%- assign linked_stop_end = linked_percent | times: forloop.index -%}
+                {%- capture linked_gradient_part -%}
+                  {{ linked_color }} {{ linked_stop_start }}% {{ linked_stop_end }}%
+                {%- endcapture -%}
+                {%- if forloop.first -%}
+                  {%- assign linked_gradient = linked_gradient_part -%}
+                {%- else -%}
+                  {%- assign linked_gradient = linked_gradient | append: ', ' | append: linked_gradient_part -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              <a
+                class="color-swatch color-swatch--{{ linked_product.handle }} color-swatch--with-image"
+                href="{{ linked_product.url }}"
+                data-url="{{ linked_product.url }}"
+                {% if linked_product.featured_media %}
+                  data-variant-image="{{ linked_product.featured_media | image_url: width: 400 }}"
+                {% endif %}
+              >
+                <p style="background: linear-gradient(90deg, {{ linked_gradient }}); width: 100%; height: 100%; border-radius: 50%; margin: 0;"></p>
+                <span class="visually-hidden">{{ linked_product.title }}</span>
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      <template data-island>
+        <script type="module">
+          import '@archetype-themes/custom-elements/swatches'
+        </script>
+      </template>
+    </color-swatches>
+  </is-land>
+{%- endif -%}

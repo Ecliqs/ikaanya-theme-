@@ -1,0 +1,155 @@
+{% assign combo_products = product.metafields.custom.separate_product_link.value %}
+
+{% if combo_products != blank %}
+  {% assign current_product_colors = product.metafields.custom.product_colors.value %}
+  {% assign selected_color_name = '' %}
+
+  {% for option in product.options_with_values %}
+    {% assign option_name_downcase = option.name | downcase %}
+    {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
+      {% assign selected_color_name = option.selected_value %}
+    {% endif %}
+  {% endfor %}
+
+  {% if selected_color_name == blank %}
+    {% for c_product in combo_products %}
+      {% if c_product.id == product.id %}
+        {% for option in c_product.options_with_values %}
+          {% assign option_name_downcase = option.name | downcase %}
+          {% if option_name_downcase contains 'color' or option_name_downcase contains 'colour' %}
+            {% assign selected_color_name = option.selected_value %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% if selected_color_name == blank %}
+    {% if current_product_colors != blank %}
+      {% assign selected_color_name = current_product_colors | first %}
+    {% endif %}
+  {% endif %}
+
+  <div class="combo_products">                
+    <span class="custom_size-chart" style="">
+      Select Your Colour:
+      <span class="variant__label-info">
+        <span data-variant-color-label="" data-index="" data-option-index="">{{ selected_color_name }}</span>
+      </span>
+    </span>
+
+    <ul class="combo_unorder">
+      {% for c_product in combo_products %}
+        {% assign colors = c_product.metafields.custom.product_colors.value %}
+
+        {% if colors != blank %}
+          {% assign gradient = '' %}
+          {% assign color_count = colors.size %}
+
+          {% for color in colors %}
+            {% assign percent = 100 | divided_by: color_count %}
+            {% assign stop_start = percent | times: forloop.index0 %}
+            {% assign stop_end = percent | times: forloop.index %}
+
+            {% capture gradient_part %}
+              {{ color }} {{ stop_start }}% {{ stop_end }}%
+            {% endcapture %}
+
+            {% if forloop.first %}
+              {% assign gradient = gradient_part %}
+            {% else %}
+              {% assign gradient = gradient | append: ', ' | append: gradient_part %}
+            {% endif %}
+          {% endfor %}
+
+          <li class="combo_list{% if c_product.id == product.id %} is-active{% endif %}">
+            <a href="{{ c_product.url }}" class="combo_anchor">
+              <p style="background: linear-gradient(90deg, {{ gradient }});" title="{{ colors | join: ', ' }}"></p>
+            </a>
+          </li>
+        {% endif %}
+
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+
+
+
+<style>
+  a.combo_anchor p {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+{% comment %} .combo_products {
+    padding-bottom: 20px;
+} {% endcomment %}
+ul.combo_unorder {
+    display: flex;
+    justify-content: flex-start;
+    list-style: none;
+    padding: 0;
+    flex-wrap: wrap;
+    margin-left: 0;
+}
+li.combo_list a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+li.combo_list {
+    margin: 10px 10px 0px;
+}
+li.combo_list a{
+    width: 45px;
+    height: 45px;
+    margin: auto;
+    border-radius: 50%;
+}             
+li.combo_list img {
+    display: block;
+    width: 70%;
+    height: 100%;
+    //object-fit: cover;
+    margin: auto;
+}
+a.combo_anchor p {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.combo_list.is-active {
+    box-shadow: 0 0 0 2px #04727d;
+}
+p.indiv-product-title-text {
+    font-size: 8px;
+    text-align: center;
+    margin: 0;
+}
+.custom_size-chart {
+    margin-bottom: 0;
+    font-size: 100%;
+    width: 100%;
+}
+li.combo_list {
+    box-shadow: 0 0 0 1px var(--color-border);
+    //padding: 10px 5px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+li.combo_list p.combo_Color {
+    padding-top: 5px;
+}
+ul.combo_unorder li.combo_list:first-child { margin-left: 0px; }
+p.combo_Color {
+    font-weight: 400;
+    font-family: 'Cantarell', sans-serif !important;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0;
+}
+</style>

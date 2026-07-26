@@ -1,0 +1,133 @@
+{% schema %}
+{
+  "name": "Featured Slider",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Number of products to show",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "products_per_row_desktop",
+      "label": "Products per row (desktop)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Slider"
+    }
+  ]
+}
+
+{% endschema %}
+
+{% style %}
+  .featured-slider {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .featured-slider .slider {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .featured-slider .flickity-viewport {
+    overflow: hidden !important;
+  }
+
+  .featured-slider .grid__item {
+    width: calc(100% / {{ section.settings.products_per_row_desktop }} - 15px);
+    margin-right: 20px;
+    /* height:100%; */
+  }
+.featured-slider .grid__item.is-selected{
+  /* min-height:464px; */
+  height: 100%;
+}
+.featured-slider .grid-product{
+  height:100%;
+}
+  @media screen and (max-width: 749px) {
+    .featured-slider .grid__item {
+      width: calc(100% - 15px); /* 1 product per row on mobile */
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .featured-slider .grid__item {
+      width: calc(50% - 15px); /* 2 products per row on tablet */
+    }
+  }
+
+  .featured-slider .flickity-button {
+    background-color: #004d4d;
+    color: white;
+  }
+
+  .section-header__title-custom {
+    text-align: center;
+  }
+
+  .new-custom-slider {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+{% endstyle %}
+
+
+{% assign collection = collections[section.settings.collection] %}
+
+{% if collection != blank %}
+  <div class="featured-slider page-width index-section">
+    <span class="new-custom-slider">
+      <h2 class="h2 center mb2 section-header__title-custom">{{ collection.title }}</h2>
+    </span>
+
+    <div class="slider slider--tablet-up flickity-enabled"
+         data-flickity='{
+           "cellAlign": "left",
+           "contain": true,
+           "wrapAround": true,
+           "pageDots": false,
+           "groupCells": true
+         }'>
+
+      {% assign max_products = section.settings.products_to_show | default: 8 %}
+      {% for product in collection.products limit: max_products %}
+        <div class="grid__item">
+          {% render 'product-grid-item',
+                  product: product,
+                  collection: collection
+                %}
+        </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- View All Button -->
+    <div class="view-all-btn-container" style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+      <a href="{{ collection.url }}" class="button btn">
+        View All
+      </a>
+    </div>
+  </div>
+{% endif %}

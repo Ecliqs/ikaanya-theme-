@@ -1,0 +1,47 @@
+<div class="home-autoscroll-page">
+  <div class="marquee"> 
+      <div class="marquee__list">
+          {%- for block in section.blocks -%}
+            <span class="marquee__icon">
+              <img src="{{ block.settings.image | img_url:'master' }}" alt="" height="" width="" />
+            </span>
+          {% endfor %}
+      </div>
+     <div class="marquee__list">
+          {%- for block in section.blocks -%}
+            <span class="marquee__icon">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | img_url:'master' }}" alt="" height="" width="" />
+              {% endif %}
+            </span>
+          {% endfor %}
+      </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Page Autoscroll Image",
+    "settings": [
+  
+    ],
+     "blocks": [
+      {
+        "type": "image",
+        "name": "image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Page Autoscroll Image"
+      }
+    ]
+  }
+{% endschema %} 

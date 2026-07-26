@@ -1,0 +1,70 @@
+{% # components v3.0.1 | Copyright © 2024 Archetype Themes Limited Partnership  | "Shopify Theme Store (https://www.shopify.com/legal/terms#9-additional-services)" License  %}
+{%- comment -%}
+  Renders a size chart block
+
+  Accepts:
+  - block {block} - Block object
+  - forloop {forloop} - Parent loop object
+  - product {product} - Product object
+
+  Usage:
+  {% render 'block-size-chart', block: block, forloop: forloop %}
+{%- endcomment -%}
+
+{%- liquid
+  assign product = section.settings.product | default: product
+  assign connect_to_variant_picker = false
+  assign sizechart_index = forloop.index0
+  assign next_block_index = sizechart_index | plus: 1
+  assign next_block = section.blocks[next_block_index]
+
+  if next_block.type == 'variant_picker' and next_block.settings.picker_type == 'button' and product.has_only_default_variant == false
+    capture size_trigger
+      render 't_with_fallback', key: 'labels.size_chart', fallback: 'size chart'
+    endcapture
+    assign size_trigger = size_trigger | downcase
+
+    for option in product.options_with_values
+      assign downcased_option = option.name | downcase
+
+      if size_trigger contains downcased_option
+        assign connect_to_variant_picker = true
+      endif
+    endfor
+  endif
+-%}
+ 
+{%- liquid
+  assign product = section.settings.product | default: product
+  assign size_chart_img = product.metafields.product.size_guid_image
+  assign size_chart_alt = "Size chart for " | append: product.title
+-%}
+
+{% if size_chart_img %}
+  {%- capture size_chart_html -%}
+    <img 
+      src="{{ size_chart_img | img_url: 'master' }}" 
+      alt="{{ size_chart_alt | escape }}" 
+      style="max-width: 100%; height: auto;" />
+  {%- endcapture -%}
+
+  {% comment %} {%- capture size_chart_title -%}
+       <span class="size-chart-title-with-icon">
+             Size Chart
+                   <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-size-chart icon--line" viewBox="0 0 64 64" width="20" height="20">
+                           <path d="M22.39 33.53c-7.46 0-13.5-3.9-13.5-8.72s6-8.72 13.5-8.72 13.5 3.9 13.5 8.72a12 12 0 0 1-.22 1.73" fill="none" stroke="currentColor"></path>
+                                   <ellipse cx="22.39" cy="24.81" rx="3.28" ry="2.12" fill="none" stroke="currentColor"></ellipse>
+                                           <path d="M8.89 24.81V38.5c0 7.9 6.4 9.41 14.3 9.41h31.92V33.53H22.39m24.39 0v7.44m-8.13-7.44v7.44m-8.13-7.44v7.44m-8.13-7.44v7.44" fill="none" stroke="currentColor"></path>
+                                                 </svg>
+                                                     </span>
+                                                       {%- endcapture -%} %} %} {% endcomment %}
+
+  {% render 'tool-tip-trigger',
+    title: size_chart_title | strip | raw,
+    content: size_chart_html | strip | raw,
+    context: 'size-chart'
+  %}
+{% else %}
+  <p>No size chart available.</p>
+{% endif %}
+

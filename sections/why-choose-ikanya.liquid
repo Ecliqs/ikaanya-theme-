@@ -1,0 +1,71 @@
+<div class="why-choose-ikaanya">
+  <div class="wrapper">
+     <h2 class="text-center">{{ section.settings.title }}</h2>
+    <div class="content">
+      <ul>
+        {%- for block in section.blocks -%}
+          <li>
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url }}" alt="" height="" width="" />
+            {% endif %}
+            <p class="text-center">{{ block.settings.title }}</p>
+            <span>{{ block.settings.content }}</span>
+          </li>
+          {% endfor %}
+      </ul>
+      <a href="{{ section.settings.btn_url }}">{{ section.settings.btn_title }}</a>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Why Choose Ikaanya",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      },
+      {
+        "type": "text",
+        "id": "btn_title",
+        "label": "Button Title"
+      },
+      {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Button Url"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "blog",
+        "name": "blog",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "Content"
+          }
+        ]
+      }
+    ],
+   "presets": [
+      {
+        "name": "Why Choose Ikaanya",
+      }
+   ]
+  }
+{% endschema %}

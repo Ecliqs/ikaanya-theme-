@@ -1,0 +1,54 @@
+<div class="home-autoscroll">
+  <div class="title">
+    {% if section.settings.title != blank %}
+      <h2>{{ section.settings.title }}</h2>
+    {% endif %}
+    </div>
+  <div class="marquee"> 
+      <div class="marquee__list">
+          {%- for block in section.blocks -%}
+            <span class="marquee__icon">
+              <img src="{{ block.settings.logo | img_url:'master' }}" alt="" height="" width="" />
+            </span>
+          {% endfor %}
+      </div>
+     <div class="marquee__list">
+          {%- for block in section.blocks -%}
+            <span class="marquee__icon">
+              <img src="{{ block.settings.logo | img_url:'master' }}" alt="" height="" width="" />
+            </span>
+          {% endfor %}
+      </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Home Autoscroll Logo",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      }
+    ],
+     "blocks": [
+      {
+        "type": "logo_image",
+        "name": "Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo Image"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Home Autoscroll Logo"
+      }
+    ]
+  }
+{% endschema %}
